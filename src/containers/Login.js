@@ -36,14 +36,12 @@ export default class Login {
       status: "connected",
     };
     this.localStorage.setItem("user", JSON.stringify(user));
-    this.login(user)
-      .catch((err) => this.createUser(user))
-      .then(() => {
-        this.onNavigate(ROUTES_PATH["Bills"]);
-        this.PREVIOUS_LOCATION = ROUTES_PATH["Bills"];
-        PREVIOUS_LOCATION = this.PREVIOUS_LOCATION;
-        this.document.body.style.backgroundColor = "#fff";
-      });
+    this.login(user).then(() => {
+      this.onNavigate(ROUTES_PATH["Bills"]);
+      this.PREVIOUS_LOCATION = ROUTES_PATH["Bills"];
+      PREVIOUS_LOCATION = this.PREVIOUS_LOCATION;
+      this.document.body.style.backgroundColor = "#fff";
+    });
   };
 
   handleSubmitAdmin = (e) => {
@@ -58,14 +56,12 @@ export default class Login {
       status: "connected",
     };
     this.localStorage.setItem("user", JSON.stringify(user));
-    this.login(user)
-      .catch((err) => this.createUser(user))
-      .then(() => {
-        this.onNavigate(ROUTES_PATH["Dashboard"]);
-        this.PREVIOUS_LOCATION = ROUTES_PATH["Dashboard"];
-        PREVIOUS_LOCATION = this.PREVIOUS_LOCATION;
-        document.body.style.backgroundColor = "#fff";
-      });
+    this.login(user).then(() => {
+      this.onNavigate(ROUTES_PATH["Dashboard"]);
+      this.PREVIOUS_LOCATION = ROUTES_PATH["Dashboard"];
+      PREVIOUS_LOCATION = this.PREVIOUS_LOCATION;
+      document.body.style.backgroundColor = "#fff";
+    });
   };
 
   // not need to cover this function by tests
@@ -100,11 +96,8 @@ export default class Login {
           }),
         })
         .then(() => {
-          console.log(`User with ${user.email} is created`);
           return this.login(user);
         });
-    } else {
-      return null;
     }
   };
 }

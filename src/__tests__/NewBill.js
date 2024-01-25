@@ -57,6 +57,32 @@ describe("When I am on NewBill Page", () => {
       expect(handleChangeFile).toBeCalled();
       expect(screen.getByText("Envoyer une note de frais")).toBeTruthy();
     });
+
+    test("Then I add wrong File", async () => {
+      const newBill = new NewBill({
+        document,
+        onNavigate,
+        store: mockStore,
+        localStorage: localStorageMock,
+      });
+
+      const handleChangeFile = jest.fn(newBill.handleChangeFile);
+      const inputFile = screen.getByTestId("file");
+      const errorFormat = screen.getByTestId("error-format");
+      inputFile.addEventListener("change", handleChangeFile);
+      fireEvent.change(inputFile, {
+        target: {
+          files: [
+            new File(["document.pdf"], "document.pdf", {
+              type: "application/pdf",
+            }),
+          ],
+        },
+      });
+
+      expect(handleChangeFile).toBeCalled();
+      expect(errorFormat.classList.contains("visible")).toBeTruthy();
+    });
   });
 });
 
