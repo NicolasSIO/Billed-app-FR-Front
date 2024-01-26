@@ -19,34 +19,38 @@ export default class NewBill {
   }
   handleChangeFile = (e) => {
     e.preventDefault();
-    const file = this.document.querySelector(`input[data-testid="file"]`)
-      .files[0];
+    const fileInput = this.document.querySelector(`input[data-testid="file"]`);
+    const file = fileInput.files[0];
     const filePath = e.target.value.split(/\\/g);
     const fileName = filePath[filePath.length - 1];
     const errorFormat = document.querySelector(".error-format");
-    if (fileName.match(/\.(jpg|jpeg|png|gif)$/)) {
-      const formData = new FormData();
-      const email = JSON.parse(localStorage.getItem("user")).email;
-      formData.append("file", file);
-      formData.append("email", email);
+    if (!fileName.match(/\.(jpg|jpeg|png|gif)$/)) {
+      if (!fileName.match(/\.(jpg|jpeg|png|gif)$/)) {
+        errorFormat.textContent = "Le fichier sélectionné n'est pas une image.";
+        errorFormat.style.color = "red";
 
-      this.store
-        .bills()
-        .create({
-          data: formData,
-          headers: {
-            noContentType: true,
-          },
-        })
-        .then(({ fileUrl, key }) => {
-          this.billId = key;
-          this.fileUrl = fileUrl;
-          this.fileName = fileName;
-        });
-    } else {
-      errorFormat.innerHTML = "Veuillez choisir un fichier de type image";
-      errorFormat.classList.add("visible");
+        fileInput.value = "";
+        return;
+      }
     }
+    const formData = new FormData();
+    const email = JSON.parse(localStorage.getItem("user")).email;
+    formData.append("file", file);
+    formData.append("email", email);
+
+    this.store
+      .bills()
+      .create({
+        data: formData,
+        headers: {
+          noContentType: true,
+        },
+      })
+      .then(({ fileUrl, key }) => {
+        this.billId = key;
+        this.fileUrl = fileUrl;
+        this.fileName = fileName;
+      });
   };
   handleSubmit = (e) => {
     e.preventDefault();

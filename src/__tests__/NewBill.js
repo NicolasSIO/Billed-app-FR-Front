@@ -68,7 +68,6 @@ describe("When I am on NewBill Page", () => {
 
       const handleChangeFile = jest.fn(newBill.handleChangeFile);
       const inputFile = screen.getByTestId("file");
-      const errorFormat = screen.getByTestId("error-format");
       inputFile.addEventListener("change", handleChangeFile);
       fireEvent.change(inputFile, {
         target: {
@@ -81,7 +80,9 @@ describe("When I am on NewBill Page", () => {
       });
 
       expect(handleChangeFile).toBeCalled();
-      expect(errorFormat.classList.contains("visible")).toBeTruthy();
+      expect(
+        screen.getByText("Le fichier sélectionné n'est pas une image.")
+      ).toBeTruthy();
     });
   });
 });
